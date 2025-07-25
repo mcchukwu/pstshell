@@ -8,6 +8,21 @@
 #define MAX_ARG_COUNT 64
 #define DELIM " \t\r\n\a"
 
+/* Function to handle cd and change directory
+ */
+// int chdir(const char *path);
+void handle_cd(char **args) {
+  if (args[1] == NULL) {
+    fprintf(stderr, "cd: expected argument\n");
+  } else {
+    if (chdir(args[1]) != 0) {
+      perror("cd");
+    }
+  }
+}
+
+/* A function to read user's input and return it's value
+ */
 char *read_input() {
   char *input = malloc(MAX_INPUT_SIZE);
 
@@ -25,6 +40,8 @@ char *read_input() {
   return input;
 }
 
+/* A function to process an input, dividing it into commands
+ * and argument, to return as tokens */
 char **parse_input(char *input) {
   int bufsize = MAX_ARG_COUNT, position = 0;
   char **tokens = malloc(bufsize * sizeof(char *));
@@ -45,8 +62,14 @@ char **parse_input(char *input) {
   return tokens;
 }
 
+/* Execute command passed and it's arguments */
 void execute_command(char **args) {
   if (args[0] == NULL) {
+    return;
+  }
+
+  if (strcmp(args[0], "cd") == 0) {
+    handle_cd(args);
     return;
   }
 
@@ -67,6 +90,7 @@ void execute_command(char **args) {
   }
 }
 
+/* Entry point */
 int main() {
   char *input;
   char **args;
@@ -82,9 +106,9 @@ int main() {
 
       break;
     }
-  }
 
-  execute_command(args);
+    execute_command(args);
+  }
 
   return 0;
 }
