@@ -10,7 +10,6 @@
 
 /* Function to handle cd and change directory
  */
-// int chdir(const char *path);
 void handle_cd(char **args) {
   if (args[1] == NULL) {
     fprintf(stderr, "cd: expected argument\n");
@@ -108,6 +107,8 @@ int main() {
     }
 
     execute_command(args);
+    free(input);
+    free(args);
   }
 
   return 0;
